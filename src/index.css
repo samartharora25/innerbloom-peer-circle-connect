@@ -8,30 +8,30 @@ All colors MUST be HSL.
 
 @layer base {
 :root {
-    --background: 150 20% 98%;
-    --foreground: 150 25% 15%;
+    --background: 0 0% 100%;
+    --foreground: 200 10% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 150 25% 15%;
+    --card-foreground: 200 10% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 150 25% 15%;
+    --popover-foreground: 200 10% 20%;
 
-    --primary: 152 60% 35%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 152 45% 55%;
+    --primary: 180 100% 85%;
+    --primary-foreground: 200 10% 20%;
+    --primary-glow: 180 100% 90%;
 
-    --secondary: 150 15% 94%;
-    --secondary-foreground: 150 25% 15%;
+    --secondary: 0 0% 98%;
+    --secondary-foreground: 200 10% 20%;
 
-    --muted: 150 15% 96%;
-    --muted-foreground: 150 10% 45%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 200 5% 45%;
 
-    --accent: 200 80% 85%;
-    --accent-foreground: 150 25% 15%;
+    --accent: 180 100% 85%;
+    --accent-foreground: 200 10% 20%;
 
-    --wellness: 180 25% 75%;
-    --wellness-foreground: 150 25% 15%;
+    --wellness: 180 100% 85%;
+    --wellness-foreground: 200 10% 20%;
 
     --destructive: 0 75% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -47,16 +47,21 @@ All colors MUST be HSL.
     --ring: 152 60% 35%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(152 60% 35%), hsl(152 45% 55%));
-    --gradient-wellness: linear-gradient(135deg, hsl(180 25% 75%), hsl(200 35% 85%));
-    --gradient-soft: linear-gradient(180deg, hsl(150 20% 98%), hsl(150 15% 94%));
+    --gradient-primary: linear-gradient(135deg, hsl(180 100% 85%), hsl(180 100% 90%));
+    --gradient-wellness: linear-gradient(135deg, hsl(180 100% 85%), hsl(180 100% 95%));
+    --gradient-soft: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
 
     /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(150 25% 15% / 0.1);
-    --shadow-glow: 0 0 30px hsl(152 45% 55% / 0.3);
+    --shadow-soft: 0 4px 20px -4px hsl(200 10% 20% / 0.1);
+    --shadow-glow: 0 0 30px hsl(180 100% 85% / 0.3);
+    --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Glass morphism */
+    --glass-bg: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.18);
 
     --radius: 0.5rem;
 
@@ -133,5 +138,22 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-glass);
+  }
+  
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 }
