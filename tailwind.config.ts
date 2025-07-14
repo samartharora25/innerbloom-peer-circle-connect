@@ -20,6 +20,7 @@ export default {
 		extend: {
 			fontFamily: {
 				kalam: ['Kalam', 'cursive'],
+				roboto: ['Roboto', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

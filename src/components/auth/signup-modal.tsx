@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Flower, User, Mail, Lock, Phone, Calendar, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import innerbloomLogo from "@/assets/innerbloom-logo.png";
 
 interface SignupModalProps {
   open: boolean;
@@ -23,7 +24,8 @@ export const SignupModal = ({ open, onOpenChange }: SignupModalProps) => {
     phone: "",
     password: "",
     concerns: "",
-    description: ""
+    description: "",
+    interests: ""
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -58,7 +60,7 @@ export const SignupModal = ({ open, onOpenChange }: SignupModalProps) => {
         <DialogHeader>
           <div className="flex items-center justify-center mb-4">
             <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-              <Flower className="w-6 h-6 text-primary" />
+              <img src={innerbloomLogo} alt="Innerbloom Logo" className="w-6 h-6 object-contain" />
             </div>
           </div>
           <DialogTitle className="text-center text-2xl font-kalam">
@@ -176,6 +178,17 @@ export const SignupModal = ({ open, onOpenChange }: SignupModalProps) => {
                       required
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="interests">What are your interests?</Label>
+                  <Input
+                    id="interests"
+                    placeholder="e.g., Music, Art, Sports, Reading"
+                    value={formData.interests}
+                    onChange={(e) => setFormData({...formData, interests: e.target.value})}
+                    className="pl-3"
+                  />
                 </div>
 
                 <div className="space-y-2">

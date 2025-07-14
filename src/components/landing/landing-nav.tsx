@@ -1,5 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Flower } from "lucide-react";
+import innerbloomLogo from "@/assets/innerbloom-logo.png";
+import { Switch } from "@/components/ui/switch";
+import { useTheme } from "next-themes";
+import { Sun, Moon } from "lucide-react";
 
 interface LandingNavProps {
   onLogin: () => void;
@@ -7,17 +11,31 @@ interface LandingNavProps {
 }
 
 export const LandingNav = ({ onLogin, onSignup }: LandingNavProps) => {
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-6xl px-4">
       <div className="glass-nav rounded-full px-6 py-3 flex items-center justify-between shadow-glow">
         <div className="flex items-center space-x-2">
-          <Flower className="w-8 h-8 text-primary" />
-          <span className="text-xl font-kalam font-bold text-foreground">
+          <img
+            src={innerbloomLogo}
+            alt="Innerbloom Logo"
+            className="w-12 h-12 object-contain"
+          />
+          <span className="text-xl font-roboto font-bold text-foreground">
             InnerBloom
           </span>
         </div>
-        
         <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <Sun className={isDark ? "opacity-50" : "text-primary"} size={18} />
+            <Switch
+              checked={isDark}
+              onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+              aria-label="Toggle dark mode"
+            />
+            <Moon className={!isDark ? "opacity-50" : "text-primary"} size={18} />
+          </div>
           <Button 
             variant="ghost" 
             onClick={onLogin}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, MessageCircle, Calendar, MapPin, Star, Filter, Search, Users } from "lucide-react";
+import { Heart, MessageCircle, Calendar, MapPin, Star, Filter, Search, Users, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,6 +20,11 @@ interface Peer {
   bio: string;
   onlineStatus: "online" | "away" | "offline";
   responseTime: string;
+}
+
+interface ChatMessage {
+  sender: string;
+  text: string;
 }
 
 const samplePeers: Peer[] = [
@@ -67,9 +72,14 @@ const samplePeers: Peer[] = [
   }
 ];
 
-export function PeerMatching() {
+export function PeerMatching({ onConnect }: { onConnect?: () => void }) {
   const [peers] = useState<Peer[]>(samplePeers);
   const [selectedPeer, setSelectedPeer] = useState<Peer | null>(null);
+  const [connectedPeerId, setConnectedPeerId] = useState<string | null>(null);
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState<{[peerId: string]: ChatMessage[]}>({});
+  const [chatInput, setChatInput] = useState("");
+  const [search, setSearch] = useState("");
 
   const getStatusColor = (status: Peer["onlineStatus"]) => {
     switch (status) {
@@ -78,6 +88,37 @@ export function PeerMatching() {
       case "offline": return "bg-muted-foreground";
     }
   };
+
+  const handleConnect = (peerId: string) => {
+    setConnectedPeerId(peerId);
+    if (onConnect) onConnect();
+    setTimeout(() => setConnectedPeerId(null), 2000);
+  };
+
+  const handleOpenChat = (peerId: string) => {
+    setShowChat(true);
+    if (!chatMessages[peerId]) {
+      setChatMessages({ ...chatMessages, [peerId]: [] });
+    }
+  };
+
+  const handleSendMessage = (peerId: string) => {
+    if (!chatInput.trim()) return;
+    setChatMessages({
+      ...chatMessages,
+      [peerId]: [...(chatMessages[peerId] || []), { sender: "You", text: chatInput }]
+    });
+    setChatInput("");
+  };
+
+  const filteredPeers = peers.filter(peer => {
+    const q = search.toLowerCase();
+    return (
+      peer.name.toLowerCase().includes(q) ||
+      peer.interests.some(i => i.toLowerCase().includes(q)) ||
+      peer.challenges.some(c => c.toLowerCase().includes(q))
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -89,7 +130,7 @@ export function PeerMatching() {
         <div className="flex gap-2">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Search interests..." className="pl-10 w-64" />
+            <Input placeholder="Search interests..." className="pl-10 w-64" value={search} onChange={e => setSearch(e.target.value)} />
           </div>
           <Button variant="outline">
             <Filter className="w-4 h-4 mr-2" />
@@ -101,7 +142,7 @@ export function PeerMatching() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Peer List */}
         <div className="lg:col-span-2 space-y-4">
-          {peers.map((peer) => (
+          {filteredPeers.map((peer) => (
             <Card 
               key={peer.id} 
               className={`shadow-soft cursor-pointer transition-smooth hover:shadow-glow ${
@@ -167,16 +208,19 @@ export function PeerMatching() {
                 <div className="flex items-center justify-between pt-2">
                   <p className="text-xs text-muted-foreground">{peer.responseTime}</p>
                   <div className="flex space-x-2">
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" onClick={e => { e.stopPropagation(); handleConnect(peer.id); }}>
                       <Heart className="w-4 h-4 mr-1" />
                       Connect
                     </Button>
-                    <Button size="sm">
+                    <Button size="sm" onClick={e => { e.stopPropagation(); handleOpenChat(peer.id); }}>
                       <MessageCircle className="w-4 h-4 mr-1" />
                       Chat
                     </Button>
                   </div>
                 </div>
+                {connectedPeerId === peer.id && (
+                  <div className="mt-2 text-green-600 text-sm">You have connected with this user.</div>
+                )}
               </CardContent>
             </Card>
           ))}
@@ -211,22 +255,19 @@ export function PeerMatching() {
                 <Separator />
                 <p className="text-sm leading-relaxed">{selectedPeer.bio}</p>
                 <Separator />
-                
                 <div className="space-y-3">
-                  <Button className="w-full shadow-glow">
+                  <Button className="w-full shadow-glow" onClick={() => handleOpenChat(selectedPeer.id)}>
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Start Conversation
                   </Button>
-                  <Button variant="outline" className="w-full">
-                    <Heart className="w-4 h-4 mr-2" />
-                    Add to Support Circle
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Schedule Check-in
-                  </Button>
+                  <div className="w-full text-center py-2 rounded border mt-2">
+                    {connectedPeerId === selectedPeer.id ? (
+                      <span className="text-green-600 font-medium">You are connected to this user.</span>
+                    ) : (
+                      <span className="text-muted-foreground">You are not connected to this user.</span>
+                    )}
+                  </div>
                 </div>
-
                 <div className="text-xs text-muted-foreground text-center">
                   {selectedPeer.responseTime}
                 </div>
@@ -242,6 +283,51 @@ export function PeerMatching() {
           )}
         </div>
       </div>
+      {/* Chat Modal */}
+      {showChat && selectedPeer && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+            <button className="absolute top-2 right-2 text-muted-foreground" onClick={() => setShowChat(false)} title="Close chat">
+              <X className="w-6 h-6" />
+            </button>
+            <div className="flex items-center gap-3 mb-4">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={selectedPeer.avatar} />
+                <AvatarFallback className="bg-gradient-primary text-primary-foreground text-xl">
+                  {selectedPeer.initials}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="font-bold text-lg text-primary">{selectedPeer.name}</div>
+                <div className="text-xs text-muted-foreground">Chat</div>
+              </div>
+            </div>
+            <div className="h-64 overflow-y-auto border rounded p-3 mb-3 bg-muted/20">
+              {(chatMessages[selectedPeer.id] || []).length === 0 && (
+                <div className="text-muted-foreground text-sm text-center mt-20">No messages yet. Say hello!</div>
+              )}
+              {(chatMessages[selectedPeer.id] || []).map((msg, idx) => (
+                <div key={idx} className={`mb-2 flex ${msg.sender === "You" ? "justify-end" : "justify-start"}`}>
+                  <div className={`px-3 py-2 rounded-lg max-w-[70%] ${msg.sender === "You" ? "bg-primary text-white" : "bg-white border"}`}>
+                    <span className="text-sm">{msg.text}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <Input
+                value={chatInput}
+                onChange={e => setChatInput(e.target.value)}
+                placeholder="Type a message..."
+                onKeyDown={e => { if (e.key === 'Enter') handleSendMessage(selectedPeer.id); }}
+              />
+              <Button onClick={() => handleSendMessage(selectedPeer.id)} disabled={!chatInput.trim()}>
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

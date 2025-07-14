@@ -17,9 +17,10 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 200 10% 20%;
 
-    --primary: 180 100% 85%;
-    --primary-foreground: 200 10% 20%;
-    --primary-glow: 180 100% 90%;
+    /* #13eba0 in HSL is 158 82% 50% */
+    --primary: 158 82% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 158 82% 70%;
 
     --secondary: 0 0% 98%;
     --secondary-foreground: 200 10% 20%;
@@ -27,11 +28,11 @@ All colors MUST be HSL.
     --muted: 0 0% 96%;
     --muted-foreground: 200 5% 45%;
 
-    --accent: 180 100% 85%;
-    --accent-foreground: 200 10% 20%;
+    --accent: 158 82% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --wellness: 180 100% 85%;
-    --wellness-foreground: 200 10% 20%;
+    --wellness: 158 82% 50%;
+    --wellness-foreground: 0 0% 100%;
 
     --destructive: 0 75% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -44,11 +45,11 @@ All colors MUST be HSL.
 
     --border: 150 20% 88%;
     --input: 150 20% 92%;
-    --ring: 152 60% 35%;
+    --ring: 158 82% 50%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(180 100% 85%), hsl(180 100% 90%));
-    --gradient-wellness: linear-gradient(135deg, hsl(180 100% 85%), hsl(180 100% 95%));
+    --gradient-primary: linear-gradient(135deg, hsl(158 82% 50%), hsl(158 82% 70%));
+    --gradient-wellness: linear-gradient(135deg, hsl(158 82% 50%), hsl(158 82% 70%));
     --gradient-soft: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
 
     /* Shadows */
@@ -144,16 +145,23 @@ All colors MUST be HSL.
 @layer components {
   .glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass);
   }
   
   .glass-nav {
     background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    opacity: 1 !important;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }

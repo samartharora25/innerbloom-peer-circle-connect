@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Flower, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import innerbloomLogo from "@/assets/innerbloom-logo.png";
 
 interface LoginModalProps {
   open: boolean;
@@ -39,7 +40,7 @@ export const LoginModal = ({ open, onOpenChange }: LoginModalProps) => {
         <DialogHeader>
           <div className="flex items-center justify-center mb-4">
             <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-              <Flower className="w-6 h-6 text-primary" />
+              <img src={innerbloomLogo} alt="Innerbloom Logo" className="w-6 h-6 object-contain" />
             </div>
           </div>
           <DialogTitle className="text-center text-2xl font-kalam">

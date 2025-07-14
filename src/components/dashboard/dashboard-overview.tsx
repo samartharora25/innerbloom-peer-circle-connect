@@ -2,38 +2,38 @@ import { Activity, Users, Calendar, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
-const stats = [
-  {
-    title: "Peer Connections",
-    value: "12",
-    icon: Users,
-    description: "Active supportive relationships",
-    gradient: "bg-gradient-wellness"
-  },
-  {
-    title: "Weekly Check-ins",
-    value: "5/7",
-    icon: Activity,
-    description: "Wellness tracking streak",
-    gradient: "bg-gradient-primary"
-  },
-  {
-    title: "Group Activities",
-    value: "3",
-    icon: Calendar,
-    description: "Upcoming community events",
-    gradient: "bg-accent"
-  },
-  {
-    title: "Support Messages",
-    value: "28",
-    icon: MessageCircle,
-    description: "Encouraging interactions this week",
-    gradient: "bg-gradient-soft"
-  }
-];
+export function DashboardOverview({ peerConnections = 12 }: { peerConnections?: number }) {
+  const stats = [
+    {
+      title: "Peer Connections",
+      value: String(peerConnections),
+      icon: Users,
+      description: "Active supportive relationships",
+      gradient: "bg-gradient-wellness"
+    },
+    {
+      title: "Weekly Check-ins",
+      value: "5/7",
+      icon: Activity,
+      description: "Wellness tracking streak",
+      gradient: "bg-gradient-primary"
+    },
+    {
+      title: "Group Activities",
+      value: "3",
+      icon: Calendar,
+      description: "Upcoming community events",
+      gradient: "bg-accent"
+    },
+    {
+      title: "Support Messages",
+      value: "28",
+      icon: MessageCircle,
+      description: "Encouraging interactions this week",
+      gradient: "bg-gradient-soft"
+    }
+  ];
 
-export function DashboardOverview() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

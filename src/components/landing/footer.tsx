@@ -1,7 +1,11 @@
 import { Flower, Instagram, MessageCircle, Mail, Shield, FileText, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import innerbloomLogo from "@/assets/innerbloom-logo.png";
+import { useState } from "react";
 
 export const Footer = () => {
+  const [showCreatedBy, setShowCreatedBy] = useState(false);
+  const [showMission, setShowMission] = useState(false);
   return (
     <footer className="bg-foreground/5 pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -9,8 +13,8 @@ export const Footer = () => {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <Flower className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-kalam font-bold text-foreground">
+              <img src={innerbloomLogo} alt="Innerbloom Logo" className="w-8 h-8 object-contain" />
+              <span className="text-2xl font-roboto font-bold text-foreground">
                 InnerBloom
               </span>
             </div>
@@ -35,9 +39,15 @@ export const Footer = () => {
             <h3 className="font-semibold text-foreground">About</h3>
             <ul className="space-y-2 text-muted-foreground">
               <li>
-                <Button variant="link" className="p-0 h-auto text-muted-foreground hover:text-primary">
+                <Button variant="link" className="p-0 h-auto text-muted-foreground hover:text-primary" onClick={() => setShowMission((v) => !v)}>
                   Our Mission
                 </Button>
+                {showMission && (
+                  <div className="mt-2 text-xs text-foreground bg-white/80 rounded p-2 shadow">
+                    India’s youth are facing a silent surge in depression, anxiety, and burnout, affecting their emotional well-being and daily lives. Beyond academic pressure and post-COVID isolation, unnoticed triggers like lack of emotional outlets, toxic comparison on social media, and overstimulation from digital content are worsening the crisis — with limited peer-driven support systems in place.<br/><br/>
+                    “InnerBloom” solves the problem by providing a safe, AI-powered platform that connects individuals with similar mental health struggles through peer matching, anonymous chat, and a supportive community. AI-driven sentiment and crisis detection, along with moderation by professional psychologists, ensure safe conversations. The platform offers structured group activities, casual games, and offline meetups for real-world impact. Features like an SOS button, therapist access, stress detection (via facial cues), and anonymized profiles ensure privacy while delivering meaningful support.
+                  </div>
+                )}
               </li>
               <li>
                 <Button variant="link" className="p-0 h-auto text-muted-foreground hover:text-primary">
@@ -73,9 +83,14 @@ export const Footer = () => {
                 </Button>
               </li>
               <li>
-                <Button variant="link" className="p-0 h-auto text-muted-foreground hover:text-primary">
+                <Button variant="link" className="p-0 h-auto text-muted-foreground hover:text-primary" onClick={() => setShowCreatedBy(true)}>
                   Contact Us
                 </Button>
+                {showCreatedBy && (
+                  <div className="mt-2 text-xs text-foreground bg-white/80 rounded p-2 shadow">
+                    created by team Alchemists
+                  </div>
+                )}
               </li>
               <li>
                 <Button variant="link" className="p-0 h-auto text-muted-foreground hover:text-primary">
