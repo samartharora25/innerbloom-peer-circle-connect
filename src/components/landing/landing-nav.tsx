@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Flower } from "lucide-react";
+import { Flower, Stethoscope } from "lucide-react";
 import innerbloomLogo from "@/assets/innerbloom-logo.png";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface LandingNavProps {
   onLogin: () => void;
@@ -12,6 +13,7 @@ interface LandingNavProps {
 
 export const LandingNav = ({ onLogin, onSignup }: LandingNavProps) => {
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
   const isDark = theme === "dark";
   return (
     <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-6xl px-4">
@@ -36,6 +38,14 @@ export const LandingNav = ({ onLogin, onSignup }: LandingNavProps) => {
             />
             <Moon className={!isDark ? "opacity-50" : "text-primary"} size={18} />
           </div>
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/doctor-dashboard")}
+            className="hover:bg-primary/10 transition-all duration-300 flex items-center space-x-2"
+          >
+            <Stethoscope className="w-4 h-4" />
+            <span>Doctor Portal</span>
+          </Button>
           <Button 
             variant="ghost" 
             onClick={onLogin}
